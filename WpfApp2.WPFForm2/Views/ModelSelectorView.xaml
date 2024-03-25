@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="WpfApp2.WPFForm2.Views.ModelSelectorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:prism="http://prismlibrary.com/"             
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+
+    <StackPanel Orientation="Vertical">
+        <!--<StackPanel Orientation="Horizontal">
+            <TextBlock Text="開発オーダ："
+                       Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+            <TextBlock Text="{Binding TargetDevOrder.DevelopmentOrderNo}" 
+                       Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+            <TextBlock Text="   顧客名："
+                       Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+            <TextBlock Text="{Binding TargetDevOrder.CustomerName}"
+                       Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+            <TextBlock Text="   案件名："
+                       Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+            <TextBlock Text="{Binding TargetDevOrder.ProjectName}" 
+                       Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+        </StackPanel>-->
+        <md:Card Margin="8" md:ElevationAssist.Elevation="Dp8" 
+        Background="{DynamicResource AccentColorBrush5}">
+            <StackPanel Orientation="Vertical" Margin="5">
+                <TextBlock Text="型式選択" Margin="5"
+                    Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                        Foreground="{StaticResource AccentBaseColorBrush}"/>
+                <TextBlock Text="既存の型式を選択するか、新しく型式を登録してください。" Margin="5"
+                    Style="{StaticResource MaterialDesignHelperTextBlock}"
+                            VerticalAlignment="Bottom"/>
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox md:HintAssist.Hint="既存の型式から選択" Margin="15,5,5,5"
+                              Background="White"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      md:TextFieldAssist.HasClearButton="True"
+                      ItemsSource="{Binding ModelList}"
+                      DisplayMemberPath="ModelName.Value"
+                      SelectedItem="{Binding SelectedModel}"
+                              FontSize="16"/>
+                    <Button Content="OK" Margin="15,5,5,5">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <prism:InvokeCommandAction Command="{Binding  SelectModelButtonClick}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                </StackPanel>
+                <TextBlock Text="または、新しく作成し登録する。" Margin="5"
+                       Style="{StaticResource MaterialDesignHelperTextBlock}"
+                               VerticalAlignment="Bottom"/>
+                <StackPanel Orientation="Horizontal" Margin="15,5,5,10">
+                    
+                    <TextBlock Text="MAP-" Margin="5" FontSize="16" 
+                       Style="{StaticResource MaterialDesignHelperTextBlock}"
+                               VerticalAlignment="Center"/>
+                    <TextBox Margin="5" FontSize="16" MaxLength="3" MinWidth="80"
+                             Background="{Binding ModelNameTextPrevBackground}"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             Text="{Binding ModelNameTextPrev}"/>
+                    <TextBlock Text="-" Margin="5" FontSize="16" 
+                       Style="{StaticResource MaterialDesignHelperTextBlock}"
+                               VerticalAlignment="Center"/>
+                    <TextBox Margin="5" FontSize="16" MaxLength="2"  MinWidth="60"
+                             Background="{Binding ModelNameTextMidBackground}"
+                             Text="{Binding ModelNameTextMid}"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                    <ComboBox ItemsSource="{Binding ModelMidAlphabet}" FontSize="16"  MinWidth="50"
+                              Background="{Binding ModelMidAlphabetBackground}"
+                              VerticalAlignment="Center" Margin="5"
+                              SelectedValue="{Binding SelectedModelMidAlphabet}"/>
+                    <TextBox Margin="5" FontSize="16" MaxLength="3"  MinWidth="80"
+                             Background="{Binding ModelNameTextBackBackground}"
+                             Text="{Binding ModelNameTextBack}"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                    <Button Content="OK" Margin="15,5,5,5">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <prism:InvokeCommandAction Command="{Binding  CreateNewModelButtonClick}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </md:Card>
+
+    </StackPanel>
+</UserControl>

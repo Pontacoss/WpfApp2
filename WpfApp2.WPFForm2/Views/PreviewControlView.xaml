@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="WpfApp2.WPFForm2.Views.PreviewControlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True">
+
+    <TabControl >
+        <TabItem Header="プレビュー(JP)">
+            <Grid >
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding PreviewJP}" >
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <DockPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="FrameworkElement">
+                                <Setter Property="DockPanel.Dock" Value="Top"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </TabItem>
+        <TabItem Header="プレビュー(EN)">
+            <Grid>
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding PreviewEN}" >
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <DockPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="FrameworkElement">
+                                <Setter Property="DockPanel.Dock" Value="Top"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </TabItem>
+        <TabItem Header="コメント履歴" Name="HistoryTab">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <StackPanel Orientation="Vertical"  Margin="5">
+                    <Label Content="■ 作成者コメント"/>
+                    <TextBlock Text="{Binding AuthorComment}"/>
+                    <Label Content="■ 照査者コメント"/>
+                    <TextBlock Text="{Binding CheckerComment}"/>
+                    <Label Content="■ 承認者コメント"/>
+                    <TextBlock Text="{Binding ApproverComment}"/>
+                </StackPanel>
+            </ScrollViewer>
+        </TabItem>
+    </TabControl>
+</UserControl>

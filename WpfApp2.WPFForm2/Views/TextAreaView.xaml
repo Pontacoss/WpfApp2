@@ -1,0 +1,150 @@
+﻿<UserControl x:Class="WpfApp2.WPFForm2.Views.TextAreaView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:WpfApp2.Domain.Helpers;assembly=WpfApp2.Domain"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Unloaded">
+            <prism:InvokeCommandAction Command="{Binding  UserControl_Unloaded}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <md:Card Margin="5"
+        md:ElevationAssist.Elevation="Dp8">
+        <DockPanel x:Name="SentenceDock" LastChildFill="True">
+            
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                <RadioButton Name="LanguageSelector" Content="JP" Margin="5" IsChecked="{Binding JPChecked}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Checked">
+                            <prism:InvokeCommandAction Command="{Binding  LanguageSelectChange}" CommandParameter="JP"/>
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="Unchecked">
+                            <prism:InvokeCommandAction Command="{Binding  LanguageSelectChange}" CommandParameter="EN"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </RadioButton>
+                <RadioButton Content="EN" Margin="5"/>
+            </StackPanel>
+            <DataGrid
+                DockPanel.Dock="Bottom"
+                x:Name="SentenceParamDataGrid" 
+                AutoGenerateColumns="False" 
+                CanUserAddRows="False" 
+                CanUserDeleteRows="False"
+                RowHeaderWidth="20"
+                CanUserResizeRows="False"
+                CanUserResizeColumns="False"
+                SelectionUnit="FullRow" 
+                AllowDrop="True"
+                IsReadOnly="True"
+                CanUserSortColumns="False"
+                SelectedItem="{Binding TextParamGridSelectedItem}"
+                ItemsSource="{Binding TextParamGridSource}">
+                
+                <DataGrid.Resources>
+                    <local:StringToBoolConverter x:Key="StringToBool"/>
+                </DataGrid.Resources>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="自動インクリメント">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <prism:InvokeCommandAction Command="{Binding  MenuItem_Click}"
+                                                           CommandParameter="自動インクリメント"
+                                                           TriggerParameterPath="Source"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </MenuItem>
+                        <MenuItem Header="計算式">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <prism:InvokeCommandAction Command="{Binding  MenuItem_Click}"
+                                                           CommandParameter="計算式"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </MenuItem>
+                        <Separator/>
+                        <MenuItem Header="削除">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <prism:InvokeCommandAction Command="{Binding  MenuItem_Click}"
+                                                           CommandParameter="削除"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </MenuItem>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button HorizontalAlignment="Center" 
+                                        Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                        ToolTip="削除" Width="18" Height="18" 
+                                        >
+                                    <md:PackIcon Kind="CloseBold" VerticalAlignment="Center" Width="10" Height="10"/>
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                            <prism:InvokeCommandAction Command="{Binding DataContext.DeleteRow,
+                                                RelativeSource={RelativeSource FindAncestor,AncestorType=DataGrid}}"
+                                                                        TriggerParameterPath="Source"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                    <!--<Style TargetType="{x:Type Button}">
+                                        <Setter Property="IsEnabled" Value="True"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Name}" Value="">
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>-->
+                                    
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="ParamId" Binding="{Binding ParamId}"/>
+                    <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
+                    <DataGridTextColumn Header="パラメータ名称" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="値"/>
+                </DataGrid.Columns>
+
+            </DataGrid>
+            <TextBlock DockPanel.Dock="Bottom" Text="{Binding CharCount}"/>
+
+            <Grid DockPanel.Dock="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="480"/>
+                    <ColumnDefinition Width="480"/>
+                </Grid.ColumnDefinitions>
+                <TextBox 
+                    Grid.Column="0"
+                    Margin="5"
+                    AcceptsReturn="True" 
+                    TextWrapping="Wrap"
+                    MaxLength="1000"
+                    Background="{StaticResource AccentColorBrush5}"
+                    Text="{Binding MainText,UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <prism:InvokeCommandAction Command="{Binding  TextBox_Changed}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+                <TextBox 
+                    Grid.Column="1"
+                    Margin="5"
+                    AcceptsReturn="True" 
+                    TextWrapping="Wrap"
+                    MaxLength="1000"
+                    Background="{StaticResource AttentionToActionBrush}"
+                    IsEnabled="False"
+                    Text="{Binding SubText}"
+                    />
+            </Grid>
+        </DockPanel>
+    </md:Card>
+</UserControl>

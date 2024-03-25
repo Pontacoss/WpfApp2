@@ -1,0 +1,289 @@
+﻿<UserControl x:Class="WpfApp2.WPFForm2.Views.TemplateSelectView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:prism="http://prismlibrary.com/" 
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:viewmodels="clr-namespace:WpfApp2.WPFForm2.ViewModels" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:WpfApp2.WPFForm2.Views"
+        prism:ViewModelLocator.AutoWireViewModel="True">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Unloaded">
+            <prism:InvokeCommandAction Command="{Binding  UserControl_Unloaded}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.PopupBox.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <md:Card md:ElevationAssist.Elevation="Dp8" Margin="5" DockPanel.Dock="Left" Grid.Column="0">
+
+            <DockPanel LastChildFill="True">
+
+                <DockPanel LastChildFill="True" DockPanel.Dock="Left">
+                    <StackPanel DockPanel.Dock="Top" Margin="10,0,0,0">
+                        <DockPanel LastChildFill="False">
+                            <TextBlock Text="試験IDの作成" VerticalAlignment="Top" DockPanel.Dock="Left"
+                                       Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                                       Foreground="{StaticResource AccentBaseColorBrush}"
+                                       FontWeight="Heavy"/>
+                            <md:PopupBox DockPanel.Dock="Right"
+                                        Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
+                                        Height="50" Width="50" Margin="0,5,5,0"
+                                        PlacementMode="LeftAndAlignMiddles" Cursor="Hand"
+                                     ToolTip="規格の編集">
+                                <md:PopupBox.ToggleContent>
+                                    <md:PackIcon Kind="Cog" Width="30" Height="30"/>
+                                </md:PopupBox.ToggleContent>
+                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                                    <Button Margin="10,0,10,0" DockPanel.Dock="Right"
+                                    Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
+                                    ToolTip="新規作成">
+                                        <md:PackIcon
+                                        Width="30"
+                                        Height="30"
+                                        Kind="FolderPlus" />
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Click">
+                                                <prism:InvokeCommandAction Command="{Binding  AddnewInspectionInfo}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </Button>
+                                    <Button
+                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                                    ToolTip="更新" >
+                                        <md:PackIcon
+                                        Width="30"
+                                        Height="30"
+                                        Kind="Update" />
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Click">
+                                                <prism:InvokeCommandAction Command="{Binding  ModifyInspectionInfo}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </Button>
+
+                                    <Button Margin="10" 
+                                    Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                                    Background="Red" Foreground="White"
+                                    BorderBrush="Red"
+                                    ToolTip="削除">
+                                        <md:PackIcon
+                                        Width="30"
+                                        Height="30"
+                                        Kind="Delete" />
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Click">
+                                                <prism:InvokeCommandAction Command="{Binding  DeleteInspectionInfo}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </Button>
+
+                                </StackPanel>
+                            </md:PopupBox>
+                        </DockPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="left" 
+                                    DockPanel.Dock="Top" Margin="0,0,50,0">
+                            
+                            <ComboBox Margin="10,0,0,0" MinWidth="50" FontSize="20"
+                                  HorizontalAlignment="Left"
+                                    md:HintAssist.Hint="規格名称"
+                                    ItemsSource="{Binding StandardNames}"
+                                    SelectedItem="{Binding SelectedName}"
+                                    Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="SelectionChanged">
+                                        <prism:InvokeCommandAction Command="{Binding  StandardSelectionChange}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+
+                            </ComboBox>
+                            <ComboBox Margin="20,0,0,0" MinWidth="80" FontSize="20"
+                                  HorizontalAlignment="Left"
+                                md:HintAssist.Hint="規格番号"
+                                ItemsSource="{Binding StandardNumbers}"
+                                SelectedItem="{Binding SelectedNumber}"
+                                  SelectedValuePath="Id" 
+                                   DisplayMemberPath="Numbering"  
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="SelectionChanged">
+                                        <prism:InvokeCommandAction Command="{Binding  NumberSelectionChange}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ComboBox>
+                        
+                        
+                        </StackPanel>
+                        
+                    </StackPanel>
+                    <DockPanel LastChildFill="True">
+                        <StackPanel Orientation="Horizontal"  DockPanel.Dock="Top" Margin="5">
+                            <md:PackIcon Kind="StarCircle" Height="20" Width="20"
+                                     Background="{StaticResource CheckmarkFill}"
+                                     Foreground="White"
+                                         HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"/>
+                            <Label Content="試験ID一覧" FontSize="18"/>
+                        </StackPanel>
+                        <DataGrid 
+                            Margin="5"
+                            DockPanel.Dock="Bottom" 
+                            HorizontalScrollBarVisibility="Auto"
+                            AutoGenerateColumns="False" 
+                            CanUserAddRows="False" 
+                            CanUserDeleteRows="False"
+                            CanUserResizeRows="False"
+                            CanUserResizeColumns="False"
+                            SelectionUnit="FullRow" 
+                            CanUserSortColumns="False"
+                            CanUserReorderColumns="False"
+                            SelectionMode="Single"
+                            IsReadOnly="True"
+                            ItemsSource ="{Binding InspectionEntities}"
+                            SelectedItem="{Binding SelectedInspection}" >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDoubleClick">
+                                    <prism:InvokeCommandAction Command="{Binding DataGridMouseDoubleClick}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <prism:InvokeCommandAction Command="{Binding DataGriSelectionChanged}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="条項" Binding="{Binding Clause.Value}" >
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <!--<Setter Property="Margin" Value="-15,0,0,0"/>-->
+                                            
+                                            <Setter Property="BorderBrush" Value="White"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalAlignment" Value="Left"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTemplateColumn Header="試験名称" Width="250" >
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <!--<Setter Property="Margin" Value="5"/>-->
+                                            <Setter Property="BorderBrush" Value="White"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock Text="{Binding NameJP.DisplayValue}"  TextWrapping="Wrap"/>
+                                                <Separator/>
+                                                <TextBlock Text="{Binding NameEN.DisplayValue}"  TextWrapping="Wrap"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridCheckBoxColumn Header="T.T." Binding="{Binding TypeTest}" >
+                                    <DataGridCheckBoxColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <!--<Setter Property="Margin" Value="5"/>-->
+                                            <Setter Property="BorderBrush" Value="White"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridCheckBoxColumn.HeaderStyle>
+                                    <DataGridCheckBoxColumn.ElementStyle>
+                                        <Style TargetType="CheckBox">
+                                            <!--<Setter Property="Margin" Value="5"/>-->
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="IsEnabled" Value="False"/>
+                                        </Style>
+                                    </DataGridCheckBoxColumn.ElementStyle>
+                                </DataGridCheckBoxColumn>
+                                <DataGridCheckBoxColumn Header="R.T." Binding="{Binding RoutinTest}" >
+                                    <DataGridCheckBoxColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <!--<Setter Property="Margin" Value="5"/>-->
+                                            <Setter Property="BorderBrush" Value="White"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridCheckBoxColumn.HeaderStyle>
+                                    <DataGridCheckBoxColumn.ElementStyle>
+                                        <Style TargetType="CheckBox">
+                                            <!--<Setter Property="Margin" Value="5"/>-->
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="IsEnabled" Value="False"/>
+                                        </Style>
+                                    </DataGridCheckBoxColumn.ElementStyle>
+                                </DataGridCheckBoxColumn>
+                                <DataGridTextColumn Header="Rev." Binding="{Binding LatestRevision.DisplayValue}" >
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <!--<Setter Property="Margin" Value="5"/>-->
+                                            <Setter Property="BorderBrush" Value="White"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <!--<Setter Property="Margin" Value="5"/>-->
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTemplateColumn Header="テンプレート">
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="BorderBrush" Value="White"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="詳細表示" 
+                                                Name="SelectedTemplateButton"
+                                                Tag="{Binding }">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <prism:InvokeCommandAction Command="{Binding Path=DataContext.ShowDetailButtonClick,
+                                                RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}}" />
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </DockPanel>
+            </DockPanel>
+        </md:Card>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+
+        <ContentControl prism:RegionManager.RegionName="TemplateRegion" Grid.Column="2" />
+    </Grid>
+</UserControl>

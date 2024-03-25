@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="WpfApp2.WPFForm2.Views.DBAddNewDBTableView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <StackPanel Orientation="Horizontal" >
+        <Label Content="テーブル名称：" Margin="10,5,0,5" VerticalAlignment="Center"/>
+        <TextBox x:Name="TableNameTextBox" Width="250" Height="25" Margin="0,5,5,5" 
+                 VerticalAlignment="Center" 
+                 Background="LightGray"/>
+        <Button Name="InportExcelButton" Content=" Excelファイル取込 " Margin="5" >
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <prism:InvokeCommandAction Command="{Binding InportExcelButton_Click}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Button>
+        <Button x:Name="AddNewDBTableButton" Content=" 手動作成 " Margin="5"  >
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <prism:InvokeCommandAction Command="{Binding AddNewDBTableButton_Click}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Button>
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="WpfApp2.WPFForm2.Views.ChangeInspectionInfoView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:prism="http://prismlibrary.com/"             
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        Height="350" Width="600" >
+    <StackPanel Orientation="Vertical" >
+        <Grid Margin="10,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="400"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Content="条項" Margin="5"/>
+            <TextBox  Grid.Row="0" Grid.Column="1"   VerticalAlignment="Center" HorizontalAlignment="Left"  Name="ClauseTextBlock" Width="200" Text="{Binding Clause}"/>
+            <Label  Grid.Row="1" Grid.Column="0"   VerticalAlignment="Center" HorizontalAlignment="Left"  Content="規格名称(JP)" Margin="5"/>
+            <TextBox Grid.Row="1" Grid.Column="1"   VerticalAlignment="Center" HorizontalAlignment="Left"   Name="NameJPTextBlock" Width="400" Text="{Binding NameJP}"/>
+            <Label  Grid.Row="2" Grid.Column="0"  VerticalAlignment="Center" HorizontalAlignment="Left"   Content="規格名称(EN)" Margin="5"/>
+            <TextBox  Grid.Row="2" Grid.Column="1"   VerticalAlignment="Center" HorizontalAlignment="Left"  Name="NameENTextBlock" Width="400" Text="{Binding NameEN}"/>
+            <Label  Grid.Row="3" Grid.Column="0"  VerticalAlignment="Center" HorizontalAlignment="Left"   Content="Type Test" Margin="5"/>
+            <CheckBox Grid.Row="3" Grid.Column="1"  VerticalAlignment="Center" HorizontalAlignment="Left" Name="TT" IsChecked="{Binding TypeTest}"/>
+            <Label  Grid.Row="4" Grid.Column="0"  VerticalAlignment="Center" HorizontalAlignment="Left"   Content="Routin Test" Margin="5"/>
+            <CheckBox Grid.Row="4" Grid.Column="1"  VerticalAlignment="Center" HorizontalAlignment="Left" Name="RT" IsChecked="{Binding RoutinTest}"/>
+
+        </Grid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Name="CanselButton" 
+                    Content="キャンセル" 
+                    Width="120" Margin="5" 
+                    Command="{Binding CancelButton_Click}" Cursor="Hand">
+                <!--<i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <prism:InvokeCommandAction Command="{Binding CancelButton_Click}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>-->
+            </Button>
+            <Button Name="AddNewButton" 
+                    Content="{Binding AddNewButtonName}" 
+                    Width="120"
+                    Margin="30,5,20,5" 
+                    Command="{Binding ChangeButton_Click}"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

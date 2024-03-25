@@ -1,0 +1,116 @@
+﻿<UserControl x:Class="WpfApp2.WPFForm2.Views.SpecSheetCreatorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"    
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <DockPanel LastChildFill="True" Background="{StaticResource AccentColorBrush4}">
+        <md:Card md:ElevationAssist.Elevation="Dp5" Margin="5" DockPanel.Dock="Top">
+            <StackPanel Orientation="Vertical">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="250"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Vertical" Grid.Column="0">
+                        <TextBlock Text="試験仕様書の作成" 
+                                       Style="{StaticResource MaterialDesignCaptionTextBlock}" FontWeight="Heavy" 
+                                      Margin="5,0,0,0"/>
+                        <TextBlock Text="{Binding ControlTitle}" Foreground="{StaticResource HighlightBrush}"
+                                    Style="{StaticResource MaterialDesignHeadline4TextBlock}" FontWeight="Heavy"
+                                   Margin="10,-10,0,0" />
+                    </StackPanel>
+
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="1">
+
+                        <Button Style="{StaticResource  MaterialDesignFloatingActionMiniDarkButton}"
+                                    ToolTip="オーダ選択に戻る" >
+                            <md:PackIcon
+                                    Width="25"
+                                    Height="25"
+                                    Kind="ArrowLeft" />
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <prism:InvokeCommandAction Command="{Binding  GoBackButton_Click}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                        <StackPanel Orientation="Vertical" Margin="5,5,5,5">
+                            <TextBlock Text="開発オーダ"  Margin="10,5,5,0"
+                               Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                               Foreground="{StaticResource AccentBaseColorBrush}"/>
+                            <TextBlock Text="{Binding TargetDevOrder.DevelopmentOrderNo}"  Margin="20,15,5,0"
+                               Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="5">
+                            <TextBlock Text="顧客名"  Margin="10,5,5,0"
+                               Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                               Foreground="{StaticResource AccentBaseColorBrush}"/>
+                            <TextBlock Text="{Binding TargetDevOrder.CustomerName}"  Margin="20,15,5,0"
+                               Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="5">
+                            <TextBlock Text="案件名"  Margin="10,5,5,0"
+                               Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                               Foreground="{StaticResource AccentBaseColorBrush}"/>
+                            <TextBlock Text="{Binding TargetDevOrder.ProjectName}"  Margin="20,15,5,0"
+                               Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="5">
+                            <TextBlock Text="型式"  Margin="10,5,5,0"
+                               Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                               Foreground="{StaticResource AccentBaseColorBrush}"/>
+                            <TextBlock Text="{Binding TargetDevOrder.ModelName}"  Margin="20,15,5,0"
+                               Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="5">
+                            <TextBlock Text="使用Rev."  Margin="10,5,5,0"
+                               Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                               Foreground="{StaticResource AccentBaseColorBrush}"/>
+                            <TextBlock Text="{Binding TargetDevOrder.SelectedRevision.DisplayValue}"  Margin="20,15,5,0"
+                               Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="5">
+                            <TextBlock Text="引用Rev."  Margin="10,5,5,0"
+                               Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                               Foreground="{StaticResource AccentBaseColorBrush}"/>
+                            <ComboBox ItemsSource="{Binding RevisionList}"  Margin="10,5,5,0"
+                                      DisplayMemberPath="DisplayValue"
+                                      SelectedItem="{Binding SelectedSSRevision}"
+                               Style="{StaticResource MaterialDesignFilledComboBox}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="SelectionChanged">
+                                        <prism:InvokeCommandAction Command="{Binding  SpecSheetRevChanged}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ComboBox>
+                        </StackPanel>
+                        <Button Style="{StaticResource  MaterialDesignFloatingActionMiniDarkButton}"
+                                    ToolTip="パラメータ入力に進む" Margin="10,0,0,0">
+                            <md:PackIcon
+                                    Width="25"
+                                    Height="25"
+                                    Kind="ArrowRight" />
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <prism:InvokeCommandAction Command="{Binding  GoNextButton_Click}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    </StackPanel>
+                    <TextBlock Text="仕様書のRev.が&#10;更新されています" VerticalAlignment="Center"
+                               TextWrapping="Wrap"
+                               Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,30,0"
+                                Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                                Foreground="{StaticResource AttentionColorBrush}"
+                                Visibility="{Binding TargetDevOrder.IsOld, 
+                                Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </Grid>
+            </StackPanel>
+        </md:Card>
+        <ContentControl prism:RegionManager.RegionName="SpecSheetRegion" Grid.Column="2" />
+    </DockPanel>
+</UserControl>

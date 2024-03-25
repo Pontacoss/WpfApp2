@@ -1,0 +1,177 @@
+﻿<UserControl x:Class="WpfApp2.WPFForm2.Views.MainControlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <Label Content="オーダ" Margin="5"></Label>
+            <ComboBox x:Name="OrderName" Width="200" Margin="5"></ComboBox>
+            <Button x:Name="OrderSeachButton" Content="オーダ検索" Margin="5"
+                    />
+            <Label Content="型式" Margin="5"></Label>
+            <ComboBox x:Name="ModelName" Width="200" Margin="5"></ComboBox>
+            <Button x:Name="ModelSeachButton" Content="型式検索" Margin="5"
+                    />
+        </StackPanel>
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Vertical">
+                    <Label Content="■ 登録数"/>
+                    <ListView Name="RegListView" Width="Auto" HorizontalAlignment="Left" Margin="5">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="試験パーツ" DisplayMemberBinding="{Binding PartsNum, StringFormat={}{0}件}" />
+                                <GridViewColumn Header="仕様書" DisplayMemberBinding="{Binding SpecNum, StringFormat={}{0}件}" />
+                                <GridViewColumn Header="成績書" DisplayMemberBinding="{Binding ReportNum, StringFormat={}{0}件}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="40"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="試験パーツ作成" Grid.RowSpan="2"
+                               BorderThickness="1" Margin="5"  FontSize="16"
+                                Background="{StaticResource AccentColorBrush5}"/>
+                        <Label Content="試験仕様書作成" Grid.Row="3" Grid.RowSpan="3"
+                               BorderThickness="1"  Margin="5" FontSize="16"
+                               Background="{StaticResource AccentColorBrush5}"/>
+                        <Button Content="新規作成" Margin="5"
+                                Grid.Column="1" Cursor="Hand">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <prism:InvokeCommandAction Command="{Binding  CreateTemplateButtonClick}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+
+
+                        <Button Content="作成状況一覧" Margin="5" 
+                                Grid.Column="1" Grid.Row="1" Cursor="Hand">
+                        </Button>
+                        <Button Content="新規作成" Margin="5"
+                                Grid.Column="1" Grid.Row="3" >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <prism:InvokeCommandAction Command="{Binding  CreateSpecSheetButtonClick}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                        <Button Content="改定" Margin="5"
+                                Grid.Column="1" Grid.Row="4"
+                                />
+                        <Button Content="作成状況一覧" Margin="5" 
+                                Grid.Column="1" Grid.Row="5" Cursor="Hand"
+                               />
+
+                        <Label Content="試験成績書作成" Grid.RowSpan="3" Grid.Column="2"
+                               BorderThickness="1" Margin="5" FontSize="16"
+                                Background="{StaticResource AccentColorBrush5}"/>
+                        <Label Content="DBメンテナンス" Grid.Column="2" Grid.Row="3" Grid.RowSpan="3"
+                               BorderThickness="1" Margin="5" FontSize="16"
+                                Background="{StaticResource AccentColorBrush5}"/>
+                        <Button Content="新規作成" Margin="5"
+                                Grid.Column="3" 
+                               />
+
+                        <Button Content="改定" Margin="5"
+                                Grid.Column="3" Grid.Row="1" Cursor="Hand">
+                        </Button>
+                        <Button Content="作成状況一覧" Margin="5"
+                                Grid.Column="3" Grid.Row="2"
+                               />
+                        <Button Content="マスタメンテ" Margin="5"
+                                Grid.Column="3" Grid.Row="5"
+                               >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <prism:InvokeCommandAction Command="{Binding  StartUp_DBMaster_Click}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                        <Button Content="照査・承認" Margin="5"
+                                Grid.Column="3" Grid.Row="3" IsEnabled="False">
+                        </Button>
+
+
+                        <Button Content="SQL" Margin="5"
+                                Grid.Column="3" Grid.Row="4">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <prism:InvokeCommandAction Command="{Binding  StartUp_SQLWriter_Click}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Vertical" Margin="20,0,0,0">
+                    <Label Content="■ 作成者ステータス"/>
+                    <ListView x:Name="MakerStatusListView"  HorizontalAlignment="Left" Margin="5">
+                        <ListView.View>
+                            <GridView>
+
+                                <GridViewColumn Header=" "
+                                                DisplayMemberBinding="{Binding DocumentName}"/>
+                                <GridViewColumn Header="作成中" 
+                                                DisplayMemberBinding="{Binding InLine}"/>
+                                <GridViewColumn Header="差戻" 
+                                                DisplayMemberBinding="{Binding Remand}"/>
+                                <GridViewColumn Header="依頼中" 
+                                                DisplayMemberBinding="{Binding Casting}"/>
+                                <GridViewColumn Header="承認待ち" 
+                                                DisplayMemberBinding="{Binding Checked}"/>
+                                <GridViewColumn Header="完了" 
+                                                DisplayMemberBinding="{Binding Complete}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Label Content="■ 照査・検認者ステータス"/>
+                    <ListView x:Name="ChekerStatusListView" HorizontalAlignment="Left" Margin="5">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header=" "
+                                                DisplayMemberBinding="{Binding DocumentName}"/>
+                                <GridViewColumn Header=" "
+                                                DisplayMemberBinding="{Binding DocumentName}"/>
+                                <GridViewColumn Header="依頼数" 
+                                                DisplayMemberBinding="{Binding DocumentName}"/>
+                                <GridViewColumn Header="完了数"
+                                                DisplayMemberBinding="{Binding DocumentName}"/>
+                                <GridViewColumn Header="未完了" 
+                                                DisplayMemberBinding="{Binding DocumentName}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Button Name="Reset" Content="Reset" Width="120" Margin="50"
+                           >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <prism:InvokeCommandAction Command="{Binding  ResetButton_Click}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </DockPanel>
+
+</UserControl>

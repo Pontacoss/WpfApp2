@@ -1,0 +1,582 @@
+﻿<UserControl x:Class="WpfApp2.WPFForm2.Views.TemplateSettingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:local="clr-namespace:WpfApp2.Domain.Helpers;assembly=WpfApp2.Domain"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             Visibility="{Binding UserControl_Visibility, Converter={StaticResource BooleanToVisibilityConverter}}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Unloaded">
+            <prism:InvokeCommandAction Command="{Binding  UserControl_Unloaded}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.PopupBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DataGrid.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TreeView.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <md:Card Margin="5" md:ElevationAssist.Elevation="Dp8" Background="{StaticResource AccentColorBrush5}" >
+        <DockPanel LastChildFill="True">
+            <DockPanel DockPanel.Dock="Top" LastChildFill="False">
+                <StackPanel Orientation="Vertical" Margin="10,0,0,0"  DockPanel.Dock="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding TemplateNameLabel}" Foreground="{StaticResource HighlightBrush}"
+                           Style="{StaticResource MaterialDesignHeadline4TextBlock}" FontWeight="Heavy" 
+                           />
+                        <Label Content="{Binding RevisionLabel}" FontSize="16"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding TemplateNameLabelEN}" DockPanel.Dock="Left"
+                           Style="{StaticResource MaterialDesignCaptionTextBlock}" FontWeight="Heavy" 
+                          Margin="5,0,0,0"/>
+                </StackPanel>
+
+                <md:PopupBox DockPanel.Dock="Right"
+                            Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
+                            Height="50" Width="50" Margin="0,0,5,0"
+                            PlacementMode="LeftAndAlignMiddles" Cursor="Hand">
+                    <md:PopupBox.ToggleContent>
+                        <md:PackIcon  Kind="Cog"  Width="30" Height="30" />
+                    </md:PopupBox.ToggleContent>
+                    
+                    <StackPanel Orientation="Horizontal">
+                        <Button Margin="10,10,10,10" DockPanel.Dock="Right"
+                            Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
+                            ToolTip="検認依頼">
+                            <md:PackIcon
+                                Width="30"
+                                Height="30"
+                                Kind="Send" />
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <prism:InvokeCommandAction Command="{Binding  RequestCheckButton_Click}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+
+                        <Button Margin="10,10,10,10" DockPanel.Dock="Right"
+                            Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                            ToolTip="プレビュー ">
+                            <md:PackIcon
+                                Width="30"
+                                Height="30"
+                                Kind="FileFind" />
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <prism:InvokeCommandAction Command="{Binding  PreviewButton_Click}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+
+                        <Button Margin="10,10,10,10" DockPanel.Dock="Right"
+                            Style="{StaticResource MaterialDesignFloatingActionAccentButton}"
+                                Background="Red" Foreground="White"
+                            ToolTip="削除">
+                            <md:PackIcon
+                                Width="30"
+                                Height="30"
+                                Kind="Delete" />
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <prism:InvokeCommandAction Command="{Binding  DeleteTemplateButton_Click}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    </StackPanel>
+                </md:PopupBox>
+            </DockPanel>
+            <TabControl DockPanel.Dock="Bottom" 
+                    HorizontalContentAlignment="Left" >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <prism:InvokeCommandAction Command="{Binding  TabSelectionChanged}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <TabItem Header="パラメータ設定">
+                    <DockPanel LastChildFill="True">
+                        <md:Card md:ElevationAssist.Elevation="Dp5" DockPanel.Dock="Right" Margin="5">
+                            <DockPanel  LastChildFill="False">
+                                <TextBlock Text="DB登録済みパラメータ一覧" DockPanel.Dock="Top" Foreground="{StaticResource HighlightBrush}"
+                                           Style="{StaticResource MaterialDesignBody1TextBlock}" FontWeight="Heavy" VerticalAlignment="Center" 
+                                           Margin="10,0,0,0" />
+                                <TreeView DockPanel.Dock="Top"
+                                    Name="DBParamTreeView"
+                                    ItemsSource="{Binding DBParamTreeViewSource}"
+                                    Width="300"
+                                    Margin="5" SelectedItemChanged="DBParamTreeView_SelectedItemChanged">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="SelectedItemChanged">
+                                            <prism:InvokeCommandAction Command="{Binding  DBParamTreeView_SelectedItemChanged}"  TriggerParameterPath="NewValue"/>
+                                        </i:EventTrigger>
+                                        <i:EventTrigger EventName="MouseDoubleClick">
+                                            <prism:InvokeCommandAction Command="{Binding  DBParamTreeView_MouseDoubleClick}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                    <TreeView.ItemContainerStyle>
+                                        <Style TargetType="TreeViewItem">
+                                            <Setter Property="TreeViewItem.IsExpanded" Value="False"/>
+                                        </Style>
+                                    </TreeView.ItemContainerStyle>
+                                    <TreeView.ItemTemplate>
+                                        <HierarchicalDataTemplate DataType="DBTreeDTO" ItemsSource="{Binding Children}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Name}" Style="{StaticResource MaterialDesignBody1TextBlock}"/>
+                                                <md:PackIcon Kind="Key" Visibility="{Binding IsPrimary, Converter={StaticResource BooleanToVisibilityConverter}}" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </HierarchicalDataTemplate>
+                                    </TreeView.ItemTemplate>
+                                </TreeView>
+                            </DockPanel>
+                        </md:Card>
+                        <md:Card md:ElevationAssist.Elevation="Dp5" DockPanel.Dock="Left" Margin="5" >
+                            <DockPanel LastChildFill="True">
+                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center" Margin="0,10,0,0" Height="80">
+                                    <Button Margin="30,10,30,10"
+                                        Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                        ToolTip="追加">
+                                        <iconPacks:PackIconCoolicons Kind="AddRow"  Width="30" Height="30"/>
+
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Click">
+                                                <prism:InvokeCommandAction Command="{Binding  AddParameterButton_Click}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </Button>
+                                    <Button Margin="30,10,30,10"
+                                        Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                        ToolTip="上に移動" Cursor="Hand">
+                                        <md:PackIcon
+                                            Width="30"
+                                            Height="30"
+                                            Kind="ArrowUpThin" />
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Click">
+                                                <prism:InvokeCommandAction Command="{Binding  ChangeOrderButton_Click}" CommandParameter="UP"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </Button>
+                                    <Button Margin="30,10,30,10"
+                                        Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                        ToolTip="下に移動">
+                                        <md:PackIcon
+                                            Width="30"
+                                            Height="30"
+                                            Kind="ArrowDownThin" />
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Click">
+                                                <prism:InvokeCommandAction Command="{Binding  ChangeOrderButton_Click}" CommandParameter="DOWN"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </Button>
+                                    <Button Margin="30,10,30,10"
+                                        Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                        ToolTip="削除">
+                                        <iconPacks:PackIconCoolicons Kind="DeleteRow"  Width="30" Height="30"/>
+
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Click">
+                                                <prism:InvokeCommandAction Command="{Binding  DeleteParameterButton_Click}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </Button>
+                                </StackPanel>
+                                <DataGrid  
+                                AutoGenerateColumns="False" 
+                                CanUserAddRows="False" 
+                                CanUserDeleteRows="True"
+                                HeadersVisibility="Column"
+                                CanUserResizeRows="False"
+                                CanUserResizeColumns="False"
+                                SelectionUnit="FullRow" 
+                                CanUserSortColumns="False"
+                                SelectionMode="Single"
+                                ItemsSource="{Binding ParamDataGridSource}"
+                                SelectedItem="{Binding SelectedParameter}"
+                                DockPanel.Dock="Top"
+                                AllowDrop="True"
+                                FontSize="16"
+                                HorizontalScrollBarVisibility="Auto"
+                                VerticalScrollBarVisibility="Auto">
+                                    <DataGrid.Columns>
+                                        <!--<DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True"/>-->
+                                        <DataGridTextColumn Header="No" Binding="{Binding Sequence}" IsReadOnly="True"/>
+                                        <md:DataGridTextColumn Header="パラメータ名" 
+                                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                                            <md:DataGridTextColumn.Binding>
+                                                <Binding Path="NameJP" >
+                                                    <Binding.ValidationRules>
+                                                        <local:NotEmptyValidationRule />
+                                                    </Binding.ValidationRules>
+                                                </Binding>
+                                            </md:DataGridTextColumn.Binding>
+                                        </md:DataGridTextColumn>
+
+
+                                        <DataGridTextColumn Header="パラメータ名_EN"  Binding="{Binding NameEN}"/>
+                                        <!--<DataGridTextColumn Header="入力方法" Binding="{Binding InputMethod.DisplayValue,Mode=OneWay}"/>-->
+                                        <DataGridTemplateColumn>
+                                            <DataGridTemplateColumn.Header>
+                                                <TextBlock Text="入力方法"/>
+                                            </DataGridTemplateColumn.Header>
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Button Content="{Binding InputMethod.DisplayValue,Mode=OneWay}">
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="Click">
+                                                                <prism:InvokeCommandAction Command="{Binding Path=DataContext.ChangeMethodButton_Click,
+                                                                        RelativeSource={RelativeSource FindAncestor, AncestorType=DataGrid}}"/>
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </Button>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridCheckBoxColumn Header="総数可変"  Binding="{Binding IsVariable}"/>
+                                        <!--<DataGridTextColumn Header="グループ" Binding="{Binding Group}"/>
+                                        
+                                        <DataGridTextColumn Header="参照先" Binding="{Binding TableName}" IsReadOnly="True"/>
+                                        <DataGridTextColumn Header="取得項目" Binding="{Binding Select}" IsReadOnly="True"/>
+                                        <DataGridTextColumn Header="絞込条件" Binding="{Binding FilteringCondition}" IsReadOnly="True"/>
+                                        <DataGridTextColumn Header="絞込条件" Binding="{Binding FilterParamId}" IsReadOnly="True"/>-->
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </DockPanel>
+                        </md:Card>
+                    </DockPanel>
+                </TabItem>
+                <TabItem Header="文書構成設定" >
+                    <DockPanel LastChildFill="True" >
+                        <DockPanel LastChildFill="True" DockPanel.Dock="Left">
+                            <md:Card md:ElevationAssist.Elevation="Dp5" DockPanel.Dock="Top" Margin="5" MaxHeight="400">
+                                <DockPanel LastChildFill="True">
+                                    <DockPanel LastChildFill="True" DockPanel.Dock="Bottom" >
+                                        <Grid >
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <md:PopupBox Grid.Column="0" HorizontalAlignment="Center"
+                                                     Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
+                                                     Height="40" Width="40" Margin="10,5,5,5"
+                                                     PlacementMode="BottomAndAlignCentres" Cursor="Hand"
+                                                     ToolTip="エリア追加">
+                                                <md:PopupBox.ToggleContent>
+                                                    <md:PackIcon Kind="FileDocumentPlusOutline"
+                                                             Foreground="{StaticResource AccentSelectedColorBrush}"
+                                                             Width="25" Height="25"/>
+                                                </md:PopupBox.ToggleContent>
+                                                <md:PopupBox.ToggleCheckedContent >
+                                                    <md:PackIcon Kind="Pencil" Foreground="{StaticResource AccentSelectedColorBrush}"
+                                                             Width="25" Height="25"/>
+                                                </md:PopupBox.ToggleCheckedContent>
+                                                <StackPanel>
+                                                    <Button 
+                                                  Content="文"
+                                                  ToolTip="文章エリア追加" >
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="Click">
+                                                                <prism:InvokeCommandAction Command="{Binding MenuItem_Click}" CommandParameter="文章エリア"/>
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </Button>
+                                                    <Button
+                                                  Content="表"
+                                                  ToolTip="表エリア追加" >
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="Click">
+                                                                <prism:InvokeCommandAction Command="{Binding MenuItem_Click}" CommandParameter="表エリア"/>
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </Button>
+                                                    <Button
+                                                  Content="図"
+                                                  ToolTip="図エリア追加">
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="Click">
+                                                                <prism:InvokeCommandAction Command="{Binding MenuItem_Click}" CommandParameter="図エリア"/>
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </Button>
+                                                </StackPanel>
+                                            </md:PopupBox>
+
+                                            <Button HorizontalAlignment="Center" Grid.Column="1" Margin="5"
+                                                            Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                                            ToolTip="上に移動" Width="40" Height="40"  >
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <prism:InvokeCommandAction Command="{Binding  MenuItem_Click}" CommandParameter="上に移動"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                                <md:PackIcon Kind="ArrowUpBold" VerticalAlignment="Center" 
+                                                         Foreground="{StaticResource AccentSelectedColorBrush}"
+                                                          Width="25" Height="25"/>
+                                            </Button>
+                                            <Button Grid.Column="2" HorizontalAlignment="Center" Margin="5"
+                                                            Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                                            ToolTip="下に移動" Width="40" Height="40"  >
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <prism:InvokeCommandAction Command="{Binding  MenuItem_Click}" CommandParameter="下に移動"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                                <md:PackIcon Kind="ArrowDownBold" VerticalAlignment="Center"
+                                                          Width="25" Height="25"/>
+                                            </Button>
+                                            <Button Grid.Column="3" HorizontalAlignment="Center" Margin="5,5,10,5"
+                                                            Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                                            ToolTip="削除" Width="40" Height="40" >
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <prism:InvokeCommandAction Command="{Binding  MenuItem_Click}" CommandParameter="削除"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                                <md:PackIcon Kind="CloseBold" VerticalAlignment="Center" 
+                                                         Width="25" Height="25"/>
+                                            </Button>
+                                        </Grid>
+                                    </DockPanel>
+
+
+
+                                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom"
+                                                Visibility="{Binding AttentionIsVisibility, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <md:PackIcon Kind="HandPointingDown" Width="25" Height="25" Margin="15,5,5,0" Foreground="{StaticResource AttentionColorBrush}"/>
+                                        <TextBlock Text="最初にエリアを追加。" Foreground="{StaticResource AttentionColorBrush}"
+                                           Style="{StaticResource MaterialDesignBody1TextBlock}" FontWeight="Heavy"
+                                                   VerticalAlignment="Center" />
+                                    </StackPanel>
+                                    <TreeView DockPanel.Dock="Top"
+                                            x:Name="CompositionTreeView" 
+                                            Margin="0,5,0,0"
+                                              ItemsSource="{Binding CompositionTreeViewSource}" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="SelectedItemChanged">
+                                                <prism:InvokeCommandAction Command="{Binding  SelectedItemChanged}" TriggerParameterPath="NewValue"/>
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="ContextMenuOpening">
+                                                <prism:InvokeCommandAction Command="{Binding  ContextMenu_ContextMenuOpening}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                        <TreeView.ItemContainerStyle>
+                                            <Style TargetType="TreeViewItem">
+                                                <Setter Property="TreeViewItem.IsExpanded" Value="True"/>
+                                            </Style>
+                                        </TreeView.ItemContainerStyle>
+                                        <TreeView.ItemTemplate>
+                                            <HierarchicalDataTemplate DataType="CompositionTreeViewSource"
+                                                            ItemsSource="{Binding Children}">
+                                                <StackPanel Orientation="Horizontal" Margin="0,0,5,0">
+                                                    <TextBlock Text="{Binding AreaType.DisplayValue}"
+                                                               Style="{StaticResource MaterialDesignBody1TextBlock}" 
+                                                               VerticalAlignment="Center" FontWeight="Heavy"/>
+                                                    <StackPanel Orientation="Horizontal" 
+                                                                Visibility="{Binding IsEnableControl, Converter={StaticResource 
+                                                                                            BooleanToVisibilityConverter}}" >
+                                                        <CheckBox  Content="可変"   IsChecked="{Binding IsVariable}"  
+                                                                   Style="{StaticResource MaterialDesignFilterChipPrimaryCheckBox}" 
+                                                                   ToolTip="繰返し回数が不明なエリアである場合はチェック。"/>
+                                                        <CheckBox  Content="所内"  IsChecked="{Binding IsHide}" 
+                                                                   Style="{StaticResource MaterialDesignFilterChipPrimaryCheckBox}"
+                                                                   ToolTip="客先提出資料には記載せず、所内向け資料にのみ表示する場合はチェック。"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </HierarchicalDataTemplate>
+                                        </TreeView.ItemTemplate>
+                                        <TreeView.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="文章エリア追加">
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="Click">
+                                                            <prism:InvokeCommandAction Command="{Binding  MenuItem_Click}" CommandParameter="文章エリア"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </MenuItem>
+                                                <MenuItem Header="表エリア追加" >
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="Click">
+                                                            <prism:InvokeCommandAction Command="{Binding  MenuItem_Click}" CommandParameter="表エリア"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </MenuItem>
+                                                <MenuItem Header="図エリア追加" >
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="Click">
+                                                            <prism:InvokeCommandAction Command="{Binding  MenuItem_Click}" CommandParameter="図エリア"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </MenuItem>
+                                                <Separator/>
+                                                <MenuItem Header="総数可変設定" >
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="Click">
+                                                            <prism:InvokeCommandAction Command="{Binding  MenuItem_Click}" CommandParameter="総数可変"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </MenuItem>
+                                                <MenuItem Header="所内向け設定" >
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="Click">
+                                                            <prism:InvokeCommandAction Command="{Binding  MenuItem_Click}" CommandParameter="所内向け"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </MenuItem>
+                                                <Separator/>
+                                                <MenuItem Header="上に移動" >
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="Click">
+                                                            <prism:InvokeCommandAction Command="{Binding  MenuItem_Click}" CommandParameter="上に移動"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </MenuItem>
+                                                <MenuItem Header="下に移動" >
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="Click">
+                                                            <prism:InvokeCommandAction Command="{Binding  MenuItem_Click}" CommandParameter="下に移動"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </MenuItem>
+                                                <Separator/>
+                                                <MenuItem Header="削除" >
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="Click">
+                                                            <prism:InvokeCommandAction Command="{Binding  MenuItem_Click}" CommandParameter="削除"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </MenuItem>
+                                            </ContextMenu>
+                                        </TreeView.ContextMenu>
+                                    </TreeView>
+                                </DockPanel>
+                            </md:Card>
+                            <md:Card md:ElevationAssist.Elevation="Dp5" DockPanel.Dock="Bottom" Margin="5" >
+                                <DockPanel LastChildFill="True">
+                                    
+                                    <TextBlock DockPanel.Dock="Top" Text=" パラメータ" 
+                                               Foreground="{StaticResource HighlightBrush}"
+                                           Style="{StaticResource MaterialDesignBody1TextBlock}" FontWeight="Heavy"/>
+                                    <TreeView DockPanel.Dock="Bottom"
+                                              x:Name="ParamTreeView" 
+                                              Margin="5"
+                                              Width="Auto" 
+                                              ItemsSource="{Binding ParamTreeViewSource}"
+                                              ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="SelectedItemChanged">
+                                                <prism:InvokeCommandAction Command="{Binding  ParamTreeSelectedItemChanged}" TriggerParameterPath="NewValue"/>
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="MouseDoubleClick">
+                                                <prism:InvokeCommandAction Command="{Binding  ParamTreeView_DoubleClick}" TriggerParameterPath="Source"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                        <TreeView.ItemContainerStyle>
+                                            <Style TargetType="TreeViewItem">
+                                                <Setter Property="TreeViewItem.IsExpanded" Value="True"/>
+                                            </Style>
+                                        </TreeView.ItemContainerStyle>
+                                        <TreeView.ItemTemplate>
+                                            <HierarchicalDataTemplate DataType="ParamTreeDTO"
+                                                            ItemsSource="{Binding Children}">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding Name}"
+                                                               ToolTip="左クリック：選択、右ドラッグ：値挿入"
+                                                               Style="{StaticResource MaterialDesignBody2TextBlock}"/>
+                                                    <TextBlock Text="  "/>
+                                                    <TextBlock Text="{Binding Value}" 
+                                                               Style="{StaticResource MaterialDesignBody2TextBlock}"/>
+                                                </StackPanel>
+                                            </HierarchicalDataTemplate>
+                                        </TreeView.ItemTemplate>
+                                    </TreeView>
+                                </DockPanel>
+                            </md:Card>
+                        </DockPanel>
+                        <ContentControl prism:RegionManager.RegionName="CompositionRegion" HorizontalAlignment="Left" DockPanel.Dock="Right"/>
+                    </DockPanel>
+                </TabItem>
+                <TabItem Header="コメント欄" >
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="4*"/>
+                            <RowDefinition Height="4*"/>
+                        </Grid.RowDefinitions>
+                        <md:Card Grid.Row="0" Grid.ColumnSpan="2" Margin="5" md:ElevationAssist.Elevation="DP5">
+                            <DockPanel LastChildFill="True">
+                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                                    <md:PackIcon Kind="Comment" VerticalAlignment="Center" Margin="5,0,0,0" Foreground="{StaticResource HighlightBrush}"/>
+                                    <TextBlock Text=" 備考欄" DockPanel.Dock="Top" Foreground="{StaticResource HighlightBrush}"
+                                           Style="{StaticResource MaterialDesignBody1TextBlock}" FontWeight="Heavy"/>
+                                </StackPanel>
+                                
+                                <TextBox Text="{Binding Description}" FontSize="16" Margin="5,0,5,5"
+                                        TextWrapping="Wrap" DockPanel.Dock="Top" 
+                                          ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                           md:HintAssist.Hint="リビジョン選択の判断材料を記入。"   />
+                            </DockPanel>
+                        </md:Card >
+                        <md:Card Grid.Row="1" Grid.Column="0" Margin="5" md:ElevationAssist.Elevation="DP5">
+                            <DockPanel>
+                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                                    <md:PackIcon Kind="Comment" VerticalAlignment="Center" Margin="5,0,0,0" Foreground="{StaticResource HighlightBrush}"/>
+                                    <TextBlock Text=" 作成者コメント記入欄" DockPanel.Dock="Top" Foreground="{StaticResource HighlightBrush}"
+                                               Style="{StaticResource MaterialDesignBody1TextBlock}" FontWeight="Heavy"/>
+                                </StackPanel>
+                                <TextBox AcceptsReturn="True" Margin="10" FontSize="16"
+                                     TextWrapping="Wrap" 
+                                     Text="{Binding AuthorCommentNew}" DockPanel.Dock="Top"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                         md:HintAssist.Hint="照査・検認者に向けたコメントを記入。" />
+                            </DockPanel>
+                        </md:Card>
+                        <md:Card Grid.Row="1" Grid.Column="1" Margin="5" md:ElevationAssist.Elevation="DP5">
+                            <DockPanel>
+                                <TextBlock Text=" 作成者コメント履歴" DockPanel.Dock="Top" Foreground="{StaticResource HighlightBrush}"
+                                           Style="{StaticResource MaterialDesignBody1TextBlock}" FontWeight="Heavy"/>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" DockPanel.Dock="Top" >
+                                    <TextBlock Text="{Binding AuthorComment}" Margin="10" FontSize="16"/>
+                                </ScrollViewer>
+                            </DockPanel>
+                        </md:Card>
+                        <md:Card Grid.Row="2" Grid.Column="0" Margin="5" md:ElevationAssist.Elevation="DP5">
+                            <DockPanel>
+                                <TextBlock Text=" 照査者コメント" DockPanel.Dock="Top" Foreground="{StaticResource HighlightBrush}"
+                                           Style="{StaticResource MaterialDesignBody1TextBlock}" FontWeight="Heavy"/>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" DockPanel.Dock="Top" >
+                                    <TextBlock Text="{Binding CheckerComment}" Margin="10" FontSize="16"/>
+                                </ScrollViewer>
+                            </DockPanel>
+                        </md:Card>
+                        <md:Card Grid.Row="2" Grid.Column="1" Margin="5" md:ElevationAssist.Elevation="DP5">
+                            <StackPanel>
+                                <TextBlock Text=" 承認者コメント" DockPanel.Dock="Top" Foreground="{StaticResource HighlightBrush}"
+                                           Style="{StaticResource MaterialDesignBody1TextBlock}" FontWeight="Heavy"/>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" DockPanel.Dock="Top" >
+                                    <TextBlock Text="{Binding ApproverComment}" Margin="10" FontSize="16"/>
+                                </ScrollViewer>
+                            </StackPanel>
+                        </md:Card>
+                  
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </DockPanel>
+    </md:Card>
+
+</UserControl>

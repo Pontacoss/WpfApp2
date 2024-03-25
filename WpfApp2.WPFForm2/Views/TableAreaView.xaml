@@ -1,0 +1,125 @@
+﻿<UserControl x:Class="WpfApp2.WPFForm2.Views.TableAreaView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:prism="http://prismlibrary.com/"       
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Unloaded">
+            <prism:InvokeCommandAction Command="{Binding  UserControl_Unloaded}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <md:Card Margin="5"
+        md:ElevationAssist.Elevation="Dp8">
+        <DockPanel x:Name="TableDock"
+                LastChildFill="True"
+                Width="500">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel  Grid.Column="0" Grid.Row="0"
+                                     Orientation="Vertical">
+                    <Label Content="■表題" Margin="10"/>
+                    <DockPanel LastChildFill="True">
+                        <Label Width="25"  Content="JP" Margin="5"/>
+                        <TextBox x:Name="TableNameTextBox" Margin="0,5,15,5"
+                             Text="{Binding TableNameJP}"/>
+                    </DockPanel>
+                    <DockPanel LastChildFill="True">
+                        <Label Width="25" Content="EN" Margin="5"/>
+                        <TextBox x:Name="TableNameTextBoxEN" Margin="0,5,15,5"
+                             Text="{Binding TableNameEN}"/>
+                    </DockPanel>
+                    <StackPanel Orientation="Vertical"
+                                        Name="ValueLabelDirection"
+                                        IsEnabled="{Binding ColumnDirectionIsEnabled}">
+                        <Label Content="■値ラベルの向き" Margin="10,5,5,5"/>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Content="行方向"
+                                    Margin="30,5,5,5"/>
+                            <RadioButton Content="列方向"
+                                    Margin="5"
+                                    Name="Direc_Col"
+                                    IsChecked="{Binding Direc_RowIsChecked}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <DockPanel LastChildFill="True" Grid.Column="1" Grid.Row="0">
+                    <TextBlock Text="列ラベル"  Margin="5" FontSize="15" DockPanel.Dock="Top"/>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" DockPanel.Dock="Bottom" >
+                        <ItemsControl ItemsSource="{Binding ColumnLabelStocker}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical"
+                                    Name="ColumnLabelStocker"
+                                    Margin="5"
+                                    Background="{StaticResource AccentColorBrush5}"    
+                                    AllowDrop="True">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Drop">
+                                                <prism:InvokeCommandAction Command="{Binding  DropLabel}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </StackPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                        </ItemsControl>
+                    </ScrollViewer>
+                </DockPanel>
+                <DockPanel LastChildFill="True" Grid.Column="0" Grid.Row="1">
+                    <TextBlock Text="行ラベル" Margin="5" FontSize="15" DockPanel.Dock="Top"/>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" DockPanel.Dock="Bottom" >
+                        <ItemsControl ItemsSource="{Binding RowLabelStocker}" >
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical"
+                                            Name="RowLabelStocker"
+                                    Margin="5"
+                                    Background="{StaticResource AccentColorBrush5}"   
+                                    AllowDrop="True">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Drop">
+                                                <prism:InvokeCommandAction Command="{Binding  DropLabel}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </StackPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </DockPanel>
+                <DockPanel LastChildFill="True" Grid.Column="1" Grid.Row="1">
+                    <TextBlock Text="値ラベル"  Margin="5" FontSize="15" DockPanel.Dock="Top"/>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" DockPanel.Dock="Bottom" >
+                        <ItemsControl ItemsSource="{Binding ValueLabelStocker}" >
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical"
+                                            Name="ValueLabelStocker"
+                                    Margin="5"
+                                    Background="{StaticResource AccentColorBrush5}" 
+                                    AllowDrop="True">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Drop">
+                                                <prism:InvokeCommandAction Command="{Binding  DropLabel}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </StackPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </DockPanel>
+            </Grid>
+        </DockPanel>
+    </md:Card>
+</UserControl>
